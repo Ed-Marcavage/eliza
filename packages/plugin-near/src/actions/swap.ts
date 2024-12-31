@@ -22,6 +22,13 @@ import {
 import { walletProvider } from "../providers/wallet";
 import { KeyPairString } from "near-api-js/lib/utils";
 
+/**
+ * Check the storage balance of a specific account in a smart contract.
+ * 
+ * @param {any} account - The account from which to check the storage balance.
+ * @param {string} contractId - The ID of the smart contract.
+ * @returns {Promise<boolean>} - A boolean indicating whether the storage balance is greater than 0.
+ */
 async function checkStorageBalance(
     account: any,
     contractId: string
@@ -40,6 +47,17 @@ async function checkStorageBalance(
 }
 
 // TODO: add functionality to support multiple networks
+/**
+ * Perform a token swap operation with the given input and output tokens, amount, and optional slippage tolerance.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime object for the current agent
+ * @param {string} inputTokenId - The token ID for the input token
+ * @param {string} outputTokenId - The token ID for the output token
+ * @param {string} amount - The amount of tokens to swap
+ * @param {number} [slippageTolerance=0.01] - The acceptable slippage tolerance for the swap operation
+ * @returns {Promise<any>} Promise that resolves to an array of transaction objects representing the swap operations
+ * @throws {Error} Throws an error if no valid swap route is found or if NEAR_ADDRESS is not configured
+ */
 async function swapToken(
     runtime: IAgentRuntime,
     inputTokenId: string,
