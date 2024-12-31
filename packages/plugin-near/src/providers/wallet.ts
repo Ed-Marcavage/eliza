@@ -17,6 +17,10 @@ const PROVIDER_CONFIG = {
     SLIPPAGE: process.env.SLIPPAGE ? parseInt(process.env.SLIPPAGE) : 1,
 };
 
+/**
+ * Interface for a Near Protocol token with details such as name, symbol, decimals, balance, UI amount,
+ * price in USD, value in USD, and optionally a value in Near tokens.
+ */
 export interface NearToken {
     name: string;
     symbol: string;
@@ -28,21 +32,46 @@ export interface NearToken {
     valueNear?: string;
 }
 
+/**
+ * Interface representing a wallet portfolio.
+ * @public
+ * @typedef {Object} WalletPortfolio
+ * @property {string} totalUsd - The total amount in USD.
+ * @property {string} [totalNear] - The total amount in NEAR tokens (optional).
+ * @property {Array<NearToken>} tokens - An array of NearToken objects.
+ */
 interface WalletPortfolio {
     totalUsd: string;
     totalNear?: string;
     tokens: Array<NearToken>;
 }
 
+/**
+ * WalletProvider class that implements Provider interface.
+ * Manages wallet operations such as fetching portfolio value, connecting to NEAR wallet, and formatting portfolio data.
+ * @implements Provider
+ */
 export class WalletProvider implements Provider {
     private cache: NodeCache;
     private account: Account | null = null;
     private keyStore: keyStores.InMemoryKeyStore;
+/**
+ * Constructor for creating a new instance of a class with an accountId.
+ * @param {string} accountId - The identifier for the account.
+ */
     constructor(private accountId: string) {
         this.cache = new NodeCache({ stdTTL: 300 }); // Cache TTL set to 5 minutes
         this.keyStore = new keyStores.InMemoryKeyStore();
     }
 
+/**
+ * Retrieves the formatted portfolio by calling 'getFormattedPortfolio' method.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime to access agent functionalities.
+ * @param {Memory} _message - The memory object containing user's message.
+ * @param {State} [_state] - Optional parameter for storing state information.
+ * @returns {Promise<string | null>} A promise that resolves with the formatted portfolio or null if an error occurs.
+ */
     async get(
         runtime: IAgentRuntime,
         _message: Memory,
@@ -56,6 +85,17 @@ export class WalletProvider implements Provider {
         }
     }
 
+/**
+ * Connects to the NEAR blockchain using the provided runtime.
+ * If the account is already connected, returns the account without attempting to reconnect.
+ * Retrieves NEAR wallet secret key and public key from the runtime settings.
+ * Throws an error if the secret key or public key is missing.
+ * Creates a KeyPair from the secret key and sets it in the keystore.
+ * Connects to NEAR using the provided configuration and returns the connected account.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime used to retrieve settings and connect to NEAR.
+ * @returns {Promise<IAccount>} The connected NEAR account.
+ */
     public async connect(runtime: IAgentRuntime) {
         if (this.account) return this.account;
 
@@ -88,6 +128,13 @@ export class WalletProvider implements Provider {
         return this.account;
     }
 
+/**
+ * Fetches data from a specified URL with retry mechanism in case of failure.
+ * 
+ * @param {string} url - The URL from which to fetch the data.
+ * @param {RequestInit} [options={}] - Additional options for the fetch request.
+ * @returns {Promise<any>} - A promise that resolves to the fetched data.
+ */
     private async fetchWithRetry(
         url: string,
         options: RequestInit = {}
@@ -117,6 +164,17 @@ export class WalletProvider implements Provider {
         throw lastError!;
     }
 
+/**
+ * Fetches the current value of the portfolio by getting the account balance,
+ * converting the balance to NEAR amount, fetching the NEAR price in USD,
+ * calculating the total value in USD, and returning the portfolio details.
+ * If a cached value exists, it will be returned without making additional API calls.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime object required for fetching the account.
+ * @returns {Promise<WalletPortfolio>} The object containing the total USD value, total NEAR balance,
+ * and an array of tokens with name, symbol, decimals, balance, UI amount, price in USD, and value in USD.
+ * @throws {Error} If there is an error fetching the portfolio value.
+ */
     async fetchPortfolioValue(
         runtime: IAgentRuntime
     ): Promise<WalletPortfolio> {
@@ -165,6 +223,13 @@ export class WalletProvider implements Provider {
         }
     }
 
+/**
+ * Fetches the current price of NEAR token in USD from the Coingecko API.
+ * If the price is already cached, the cached value is returned.
+ * If not, the price is fetched from the API and stored in the cache for future use.
+ * 
+ * @returns {Promise<number>} The current price of NEAR token in USD.
+ */
     private async fetchNearPrice(): Promise<number> {
         const cacheKey = "near-price";
         const cachedPrice = this.cache.get<number>(cacheKey);
@@ -186,6 +251,13 @@ export class WalletProvider implements Provider {
         }
     }
 
+/**
+ * Formats the given WalletPortfolio data into a user-friendly string output.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime information of the agent.
+ * @param {WalletPortfolio} portfolio - The portfolio data to be formatted.
+ * @returns {string} The formatted string output representing the portfolio information.
+ */
     formatPortfolio(
         runtime: IAgentRuntime,
         portfolio: WalletPortfolio
@@ -209,6 +281,12 @@ export class WalletProvider implements Provider {
         return output;
     }
 
+/**
+ * Asynchronously retrieves the portfolio value from the given runtime and returns it in a formatted string.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime to fetch portfolio value from.
+ * @returns {Promise<string>} A promise that resolves with the formatted portfolio value string.
+ */
     async getFormattedPortfolio(runtime: IAgentRuntime): Promise<string> {
         try {
             const portfolio = await this.fetchPortfolioValue(runtime);
