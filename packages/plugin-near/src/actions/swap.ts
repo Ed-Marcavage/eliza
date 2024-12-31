@@ -22,6 +22,13 @@ import {
 import { walletProvider } from "../providers/wallet";
 import { KeyPairString } from "near-api-js/lib/utils";
 
+/**
+ * Asynchronously checks the storage balance of a specific account within a smart contract.
+ * 
+ * @param {any} account - The account from which to check the storage balance.
+ * @param {string} contractId - The ID of the smart contract to query.
+ * @returns {Promise<boolean>} A boolean indicating whether the storage balance is not null and not equal to "0".
+ */
 async function checkStorageBalance(
     account: any,
     contractId: string
@@ -33,6 +40,13 @@ async function checkStorageBalance(
             args: { account_id: account.accountId },
         });
         return balance !== null && balance.total !== "0";
+/**
+ * Asynchronously checks the storage balance of a specified account within a smart contract.
+ *
+ * @param {any} account - The account object to check the storage balance for.
+ * @param {string} contractId - The ID of the contract to interact with.
+ * @returns {Promise<boolean>} - A promise that resolves to a boolean indicating if the storage balance is not null and total is not "0".
+ */
     } catch (error) {
         console.log(`Error checking storage balance: ${error}`);
         return false;
@@ -40,6 +54,27 @@ async function checkStorageBalance(
 }
 
 // TODO: add functionality to support multiple networks
+/**
+ * Function to swap tokens in a decentralized manner
+ * 
+ * @param {IAgentRuntime} runtime - The agent runtime object
+ * @param {string} inputTokenId - The token ID of the input token
+ * @param {string} outputTokenId - The token ID of the output token
+ * @param {string} amount - The amount of input tokens to swap
+ * @param {number} [slippageTolerance=0.01] - The acceptable slippage tolerance for the swap
+ * 
+ * @returns {Promise<any>} - Promise resolving to an array of transactions representing the swap actions
+ */
+/**
+ * Asynchronously executes a token swap operation.
+ * @param {IAgentRuntime} runtime - The Agent runtime object.
+ * @param {string} inputTokenId - The ID of the input token.
+ * @param {string} outputTokenId - The ID of the output token.
+ * @param {string} amount - The amount of tokens to swap.
+ * @param {number} slippageTolerance - The acceptable slippage tolerance for the swap operation. Default is 0.01.
+ * @returns {Promise<any>} A promise that resolves with the transactions resulting from the swap operation.
+ * @throws {Error} If no valid swap route is found, NEAR_ADDRESS is not configured, or any other error occurs during the swap operation.
+ */
 async function swapToken(
     runtime: IAgentRuntime,
     inputTokenId: string,
