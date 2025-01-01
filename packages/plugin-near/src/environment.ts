@@ -21,8 +21,47 @@ export const nearEnvSchema = z.object({
     REF_DCL_SWAP_CONTRACT_ID: z.string(),
 });
 
+/**
+ * Represents the configuration for a Near environment.
+ */
 export type NearConfig = z.infer<typeof nearEnvSchema>;
 
+/**
+ * Retrieve configuration based on the provided environment or default values.
+ * @param {string} env - The environment to retrieve configuration for. Defaults to ENV, process.env.NEAR_ENV, or process.env.REACT_APP_REF_SDK_ENV.
+ * @returns {object} - The configuration object based on the environment:
+ *      - For "mainnet": 
+ *          networkId: "mainnet"
+ *          nodeUrl: "https://rpc.mainnet.near.org"
+ *          walletUrl: "https://wallet.near.org"
+ *          WRAP_NEAR_CONTRACT_ID: "wrap.near"
+ *          REF_FI_CONTRACT_ID: "v2.ref-finance.near"
+ *          REF_TOKEN_ID: "token.v2.ref-finance.near"
+ *          indexerUrl: "https://indexer.ref.finance"
+ *          explorerUrl: "https://testnet.nearblocks.io"
+ *          REF_DCL_SWAP_CONTRACT_ID: "dclv2.ref-labs.near"
+ *      - For "testnet":
+ *          networkId: "testnet"
+ *          nodeUrl: "https://rpc.testnet.near.org"
+ *          walletUrl: "https://wallet.testnet.near.org"
+ *          indexerUrl: "https://testnet-indexer.ref-finance.com"
+ *          WRAP_NEAR_CONTRACT_ID: "wrap.testnet"
+ *          REF_FI_CONTRACT_ID: "ref-finance-101.testnet"
+ *          REF_TOKEN_ID: "ref.fakes.testnet"
+ *          explorerUrl: "https://testnet.nearblocks.io"
+ *          REF_DCL_SWAP_CONTRACT_ID: "dclv2.ref-dev.testnet"
+ *      - Default:
+ *          networkId: "mainnet"
+ *          nodeUrl: "https://rpc.mainnet.near.org"
+ *          walletUrl: "https://wallet.near.org"
+ *          REF_FI_CONTRACT_ID: "v2.ref-finance.near"
+ *          WRAP_NEAR_CONTRACT_ID: "wrap.near"
+ *          REF_TOKEN_ID: "token.v2.ref-finance.near"
+ *          indexerUrl: "https://indexer.ref.finance"
+ *          explorerUrl: "https://nearblocks.io"
+ *          REF_DCL_SWAP_CONTRACT_ID: "dclv2.ref-labs.near"
+ */
+       
 export function getConfig(
     env: string | undefined | null = ENV ||
         process.env.NEAR_ENV ||
@@ -69,6 +108,16 @@ export function getConfig(
     }
 }
 
+/**
+ * Validates the Near configuration based on the provided runtime.
+ * Retrieves config settings from the runtime and environment variables,
+ * merges them with environment-specific config, and validates against
+ * the Near environment schema.
+ * 
+ * @param {IAgentRuntime} runtime - The agent runtime to retrieve settings from.
+ * @returns {Promise<NearConfig>} - A promise that resolves with the validated Near configuration.
+ * @throws {Error} - If validation fails, an error is thrown with detailed error messages.
+ */
 export async function validateNearConfig(
     runtime: IAgentRuntime
 ): Promise<NearConfig> {
