@@ -1,5 +1,7 @@
 import { TSESTree } from "@typescript-eslint/types";
 
+import { TSESTree } from "@typescript-eslint/types";
+
 export interface ASTQueueItem {
     name: string;
     filePath: string;
@@ -35,6 +37,7 @@ export interface OrganizedDocs {
     methods: ASTQueueItem[];
     interfaces: ASTQueueItem[];
     types: ASTQueueItem[];
+    functions: ASTQueueItem[];
 }
 
 export interface TodoSection {
@@ -80,4 +83,7 @@ export interface PluginDocumentation {
     apiReference: string;
     troubleshooting: string;
     todos: string;
+    actionsDocumentation: string;
+    providersDocumentation: string;
+    evaluatorsDocumentation: string;
 }

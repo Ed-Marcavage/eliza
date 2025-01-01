@@ -1,6 +1,7 @@
 import type { TSESTree } from '@typescript-eslint/types';
 import { TypeScriptParser } from './TypeScriptParser.js';
 import { ASTQueueItem, EnvUsage, TodoItem } from './types/index.js';
+import { ASTQueueItem, EnvUsage, TodoItem } from './types/index.js';
 
 type AST_NODE_TYPES = {
     ClassDeclaration: 'ClassDeclaration';
@@ -156,6 +157,8 @@ export class JsDocAnalyzer {
 
 
     public missingJsDocNodes: TSESTree.Node[] = [];
+    public todoItems: TodoItem[] = [];
+    public envUsages: EnvUsage[] = [];
     public todoItems: TodoItem[] = [];
     public envUsages: EnvUsage[] = [];
 
@@ -481,11 +484,6 @@ public findEnvUsages(ast: TSESTree.Program, sourceCode: string): void {
             const contextNode = this.findParentStatement(node);
             // Get the containing function/block for full context
             const containingBlock = this.findContainingBlock(node);
-
-            // Add logging to debug
-            console.log('Found process.env at line:', node.loc.start.line);
-            console.log('Context node type:', contextNode?.type);
-            console.log('Containing block type:', containingBlock?.type);
 
             // Get just the process.env reference
             const code = this.extractNodeCode(sourceCode, node);
