@@ -15,12 +15,26 @@ import { KeyPairString } from "near-api-js/lib/utils";
 import { utils as nearUtils } from "near-api-js";
 // import BigNumber from "bignumber.js";
 
+/**
+ * Interface representing the content of a transfer operation.
+ * Extends the Content interface.
+ * @property {string} recipient - The recipient of the transfer.
+ * @property {string | number} amount - The amount to be transferred.
+ * @property {string} [tokenAddress] - Optional token address for non-native NEAR transfers.
+ */
 export interface TransferContent extends Content {
     recipient: string;
     amount: string | number;
     tokenAddress?: string; // Optional for native NEAR transfers
 }
 
+/**
+ * Checks if the specified content is of type TransferContent.
+ *
+ * @param {IAgentRuntime} runtime - The runtime environment for running the function.
+ * @param {any} content - The content to be checked.
+ * @returns {boolean} Returns true if the content is of type TransferContent, false otherwise.
+ */
 function isTransferContent(
     runtime: IAgentRuntime,
     content: any
@@ -56,6 +70,13 @@ Extract the following information about the requested token transfer:
 
 Respond with a JSON markdown block containing only the extracted values.`;
 
+/**
+ * Transfer NEAR tokens from the current account to a specified recipient.
+ * @param {IAgentRuntime} runtime - The runtime object for accessing settings and other runtime functions.
+ * @param {string} recipient - The NEAR account ID of the recipient.
+ * @param {string} amount - The amount of NEAR to transfer in string format.
+ * @returns {Promise<string>} - A Promise that resolves to the transaction hash of the transfer.
+ */
 async function transferNEAR(
     runtime: IAgentRuntime,
     recipient: string,
