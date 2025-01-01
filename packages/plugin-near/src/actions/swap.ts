@@ -22,6 +22,13 @@ import {
 import { walletProvider } from "../providers/wallet";
 import { KeyPairString } from "near-api-js/lib/utils";
 
+/**
+ * Asynchronously checks the storage balance of a specified account within a contract.
+ *
+ * @param {any} account - The account object to check the storage balance for.
+ * @param {string} contractId - The ID of the contract to query for storage balance.
+ * @returns {Promise<boolean>} A boolean indicating if the storage balance is greater than zero.
+ */
 async function checkStorageBalance(
     account: any,
     contractId: string
@@ -40,6 +47,15 @@ async function checkStorageBalance(
 }
 
 // TODO: add functionality to support multiple networks
+/**
+ * Function to perform token swap
+ * @param {IAgentRuntime} runtime - The runtime instance
+ * @param {string} inputTokenId - The token ID for input token
+ * @param {string} outputTokenId - The token ID for output token
+ * @param {string} amount - The amount of tokens to swap
+ * @param {number} slippageTolerance - The slippage tolerance for the swap (default: 0.01)
+ * @returns {Promise<any>} - Array of transactions for token swap
+ */
 async function swapToken(
     runtime: IAgentRuntime,
     inputTokenId: string,
