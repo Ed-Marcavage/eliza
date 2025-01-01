@@ -21,8 +21,16 @@ export const nearEnvSchema = z.object({
     REF_DCL_SWAP_CONTRACT_ID: z.string(),
 });
 
+/**
+ * Represents the configuration for near environment.
+ */
 export type NearConfig = z.infer<typeof nearEnvSchema>;
 
+/**
+ * Get configuration based on provided environment or default environment variables.
+ * @param {string | undefined | null} [env=ENV || process.env.NEAR_ENV || process.env.REACT_APP_REF_SDK_ENV] - The environment to get configuration for.
+ * @returns {object} - The configuration object based on provided environment.
+ */
 export function getConfig(
     env: string | undefined | null = ENV ||
         process.env.NEAR_ENV ||
@@ -69,6 +77,11 @@ export function getConfig(
     }
 }
 
+/**
+ * Validate the NEAR configuration based on the provided runtime settings and environment variables.
+ * @param {IAgentRuntime} runtime - The runtime interface for retrieving settings.
+ * @returns {Promise<NearConfig>} - A Promise that resolves to a validated NearConfig object.
+ */
 export async function validateNearConfig(
     runtime: IAgentRuntime
 ): Promise<NearConfig> {
