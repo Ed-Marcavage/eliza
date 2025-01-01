@@ -15,12 +15,26 @@ import { KeyPairString } from "near-api-js/lib/utils";
 import { utils as nearUtils } from "near-api-js";
 // import BigNumber from "bignumber.js";
 
+/**
+ * Interface for transferring content with specific recipient, amount, and optional token address.
+ * @interface TransferContent
+ * @extends Content
+ * @property {string} recipient - The recipient of the transfer.
+ * @property {string | number} amount - The amount to be transferred.
+ * @property {string} [tokenAddress] - Optional token address for native NEAR transfers.
+ */
 export interface TransferContent extends Content {
     recipient: string;
     amount: string | number;
     tokenAddress?: string; // Optional for native NEAR transfers
 }
 
+/**
+ * Check if the given content object is a TransferContent object.
+ * @param {IAgentRuntime} runtime - The runtime object.
+ * @param {any} content - The content object to check.
+ * @returns {boolean} Returns true if the content is of type TransferContent.
+ */
 function isTransferContent(
     runtime: IAgentRuntime,
     content: any
@@ -56,6 +70,14 @@ Extract the following information about the requested token transfer:
 
 Respond with a JSON markdown block containing only the extracted values.`;
 
+/**
+ * Transfers a specified amount of NEAR tokens from the current wallet account to a recipient.
+ * @param {IAgentRuntime} runtime - The agent runtime providing settings and connection to NEAR.
+ * @param {string} recipient - The NEAR account ID of the recipient.
+ * @param {string} amount - The amount of NEAR tokens to transfer (in NEAR).
+ * @returns {Promise<string>} - A promise that resolves to the hash of the transaction upon successful transfer.
+ * @throws {Error} - If NEAR wallet credentials are not configured in the runtime settings.
+ */
 async function transferNEAR(
     runtime: IAgentRuntime,
     recipient: string,
