@@ -1,147 +1,446 @@
-# Eliza 🤖
 
-<div align="center">
-  <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
-</div>
+# Plugin Documentation
+## Overview and Purpose
+# @elizaos/plugin-near
 
-<div align="center">
+### Purpose:
+The purpose of this plugin is to provide functionalities for interacting with a NEAR wallet, fetching portfolio value, and formatting portfolio information.
 
-📖 [Documentation](https://elizaos.github.io/eliza/) | 🎯 [Examples](https://github.com/thejoven/awesome-eliza)
+### Main Features:
+- **WalletProvider class:** This class represents a Wallet Provider that implements the Provider interface, allowing users to interact with a NEAR wallet, fetch portfolio value, and format portfolio information.
+- **Key interfaces:**
+  - **TransferContent:** Represents the content of a transfer, including recipient, amount, and token address for native NEAR transfers.
+  - **NearToken:** Represents a token in the NEAR Protocol ecosystem, providing information such as name, symbol, balance, price in USD, and value in NEAR tokens.
+  - **WalletPortfolio:** Represents a wallet portfolio, including total amount in USD, total amount in NEAR (if available), and an array of NearToken objects for different tokens.
+## Installation
+### Installation and Integration Instructions for @elizaos/plugin-near
 
-</div>
+#### Adding the Plugin to Your ElizaOS Project:
+1. Add the following to your agent/package.json dependencies:
+   ```json
+   {
+     "dependencies": {
+       "@elizaos/plugin-near": "workspace:*"
+     }
+   }
+   ```
+2. cd into the agent/ directory
+3. Run `pnpm install` to install the new dependency
+4. Run `pnpm build` to build the project with the new plugin
 
-## 🌍 README Translations
+#### Importing and Using the Plugin:
+- Import syntax:
+  ```typescript
+  import { nearPlugin } from "@elizaos/plugin-near";
+  ```
+- Add it to the AgentRuntime plugins array:
+  ```typescript
+  new AgentRuntime({
+      // other configuration...
+      plugins: [
+          nearPlugin,
+          // other plugins...
+      ],
+  });
+  ```
 
-[中文说明](./README_CN.md) | [日本語の説明](./README_JA.md) | [한국어 설명](./README_KOR.md) | [Français](./README_FR.md) | [Português](./README_PTBR.md) | [Türkçe](./README_TR.md) | [Русский](./README_RU.md) | [Español](./README_ES.md) | [Italiano](./README_IT.md) | [ไทย](./README_TH.md) | [Deutsch](./README_DE.md) | [Tiếng Việt](./README_VI.md) | [עִברִית](https://github.com/elizaos/Elisa/blob/main/README_HE.md) | [Tagalog](./README_TG.md) | [Polski](./README_PL.md)
+#### Integration Example:
+```typescript
+import { nearPlugin } from "@elizaos/plugin-near";
 
-## 🚩 Overview
-
-<div align="center">
-  <img src="./docs/static/img/eliza_diagram.jpg" alt="Eliza Diagram" width="100%" />
-</div>
-
-## ✨ Features
-
-- 🛠️ Full-featured Discord, Twitter and Telegram connectors
-- 🔗 Support for every model (Llama, Grok, OpenAI, Anthropic, etc.)
-- 👥 Multi-agent and room support
-- 📚 Easily ingest and interact with your documents
-- 💾 Retrievable memory and document store
-- 🚀 Highly extensible - create your own actions and clients
-- ☁️ Supports many models (local Llama, OpenAI, Anthropic, Groq, etc.)
-- 📦 Just works!
-
-## Video Tutorials
-
-[AI Agent Dev School](https://www.youtube.com/watch?v=ArptLpQiKfI&list=PLx5pnFXdPTRzWla0RaOxALTSTnVq53fKL)
-
-## 🎯 Use Cases
-
-- 🤖 Chatbots
-- 🕵️ Autonomous Agents
-- 📈 Business Process Handling
-- 🎮 Video Game NPCs
-- 🧠 Trading
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- [Python 2.7+](https://www.python.org/downloads/)
-- [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [pnpm](https://pnpm.io/installation)
-
-> **Note for Windows Users:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) is required.
-
-### Use the Starter (Recommended)
-
-```bash
-git clone https://github.com/elizaos/eliza-starter.git
-cd eliza-starter
-cp .env.example .env
-pnpm i && pnpm build && pnpm start
-```
-Once the agent is running, You should see the message to run "pnpm start:client" at the end.
-Open another terminal and move to same directory and then run below command and follow the URL to chat to your agent.
-```bash
-pnpm start:client
+return new AgentRuntime({
+    // other configuration...
+    plugins: [
+        nearPlugin,
+        // other plugins...
+    ],
+});
 ```
 
-Then read the [Documentation](https://elizaos.github.io/eliza/) to learn how to customize your Eliza.
+#### Verification Steps:
+Ensure successful integration by checking for the following in the console:
+- ["✓ Registering action: <plugin actions>"]
 
-### Manually Start Eliza (Only recommended if you know what you are doing)
+Make sure to follow the installation and integration steps carefully to successfully incorporate the Near Protocol Plugin for Eliza into your ElizaOS project.
+## Configuration
+# Configuration Documentation
 
-```bash
-# Clone the repository
-git clone https://github.com/elizaos/eliza.git
+To configure the application, please set the following environment variables in a `.env` file:
 
-# Checkout the latest release
-# This project iterates fast, so we recommend checking out the latest release
-git checkout $(git describe --tags --abbrev=0)
+```plaintext
+NEAR_ENV=
+REACT_APP_REF_SDK_ENV=
+NEAR_WALLET_SECRET_KEY=
+NEAR_WALLET_PUBLIC_KEY=
+NEAR_ADDRESS=
+SLIPPAGE=
+RPC_URL=
+NEAR_NETWORK=
 ```
 
-### Start Eliza with Gitpod
+## Environment Variables and Their Purpose
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/elizaos/eliza/tree/main)
+1. `NEAR_ENV`: Used to specify the NEAR environment.
+2. `REACT_APP_REF_SDK_ENV`: Used for SDK environment configuration.
+3. `NEAR_WALLET_SECRET_KEY`: Contains the secret key for NEAR wallet.
+4. `NEAR_WALLET_PUBLIC_KEY`: Contains the public key for NEAR wallet.
+5. `NEAR_ADDRESS`: Specifies the NEAR address.
+6. `SLIPPAGE`: Used to set the slippage ratio.
+7. `RPC_URL`: Specifies the RPC URL.
+8. `NEAR_NETWORK`: Sets the NEAR network.
 
-### Edit the .env file
+## Note:
+Please ensure that the `.env` file is added to the `.gitignore` to prevent it from being committed to the repository. This will help to keep sensitive information secure.
 
-Copy .env.example to .env and fill in the appropriate values.
+If you need more information on specific endpoints or URLs, refer to the provided code snippets.
+## Actions
 
-```
-cp .env.example .env
-```
+## Providers
 
-Note: .env is optional. If you're planning to run multiple distinct agents, you can pass secrets through the character JSON
+## Evaluators
 
-### Automatically Start Eliza
+## Usage Examples
+# Usage Documentation for Wallet Provider Class
 
-This will run everything to set up the project and start the bot with the default character.
+### Classes:
 
-```bash
-sh scripts/start.sh
-```
+#### Wallet Provider:
+A class representing a Wallet Provider that implements the Provider interface. Provides functionalities to interact with a NEAR wallet, fetch portfolio value, and format portfolio information.
 
-### Edit the character file
-
-1. Open `packages/core/src/defaultCharacter.ts` to modify the default character. Uncomment and edit.
-
-2. To load custom characters:
-    - Use `pnpm start --characters="path/to/your/character.json"`
-    - Multiple character files can be loaded simultaneously
-3. Connect with X (Twitter)
-    - change `"clients": []` to `"clients": ["twitter"]` in the character file to connect with X
-
-### Manually Start Eliza
-
-```bash
-pnpm i
-pnpm build
-pnpm start
-
-# The project iterates fast, sometimes you need to clean the project if you are coming back to the project
-pnpm clean
+```javascript
+/**
+ * A class representing a Wallet Provider that implements the Provider interface.
+ * Provides functionalities to interact with a NEAR wallet, fetch portfolio value, and format portfolio information.
+ * @implements {Provider}
+ */
+class WalletProvider {
+   // Class implementation goes here
+}
 ```
 
-#### Additional Requirements
+### Methods:
 
-You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
+#### constructor:
+Constructor for creating an instance of the class.
 
+```javascript
+/**
+ * Constructor for creating an instance of the class.
+ * @param {string} accountId - The unique identifier for the account associated with the instance.
+ */
 ```
-pnpm install --include=optional sharp
+
+#### get:
+Asynchronously retrieves the formatted portfolio using the provided IAgentRuntime.
+
+```javascript
+/**
+ * Asynchronously retrieves the formatted portfolio using the provided IAgentRuntime.
+ * 
+ * @param {IAgentRuntime} runtime - The IAgentRuntime to use for retrieving the portfolio.
+ * @param {Memory} _message - The message object.
+ * @param {State} [_state] - The optional state object.
+ * @returns {Promise<string | null>} A Promise that resolves with the formatted portfolio or null if an error occurs.
+ */
 ```
 
-### Community & contact
+#### connect:
+Connects to NEAR blockchain using the provided runtime and sets up the account with the necessary credentials.
 
-- [GitHub Issues](https://github.com/elizaos/eliza/issues). Best for: bugs you encounter using Eliza, and feature proposals.
-- [Discord](https://discord.gg/ai16z). Best for: sharing your applications and hanging out with the community.
+```javascript
+/**
+ * Connects to NEAR blockchain using the provided runtime and sets up the account with the necessary credentials.
+ * @param {IAgentRuntime} runtime - The runtime object that provides access to settings and other runtime functionalities.
+ * @returns {Promise<Account>} - A promise that resolves to the connected NEAR account object.
+ * @throws {Error} - If NEAR wallet credentials are not configured.
+ */
+```
 
-## Contributors
+#### fetchWithRetry:
+Fetches data from a specified URL with the option to retry multiple times if the request fails.
 
-<a href="https://github.com/elizaos/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=elizaos/eliza" />
-</a>
+```javascript
+/**
+ * Fetches data from a specified URL with the option to retry multiple times if the request fails.
+ * @param {string} url - The URL to fetch data from.
+ * @param {RequestInit} [options={}] - Additional options to include in the fetch request.
+ * @returns {Promise<any>} The response data from the fetch request.
+ */
+```
 
-## Star History
+#### fetchPortfolioValue:
+Asynchronously fetches the current portfolio value for the user's account.
 
-[![Star History Chart](https://api.star-history.com/svg?repos=elizaos/eliza&type=Date)](https://star-history.com/#elizaos/eliza&Date)
+```javascript
+/**
+ * Asynchronously fetches the current portfolio value for the user's account.
+ * If the value is already present in the cache, it will return the cached value.
+ *
+ * @param {IAgentRuntime} runtime - The Agent Runtime interface.
+ * @returns {Promise<WalletPortfolio>} The portfolio containing the total USD value, total NEAR balance,
+ * and an array of tokens with their respective details.
+ */
+```
+
+#### fetchNearPrice:
+Fetches the near price from a specified API endpoint with a retry mechanism.
+
+```javascript
+/**
+ * Fetches the near price from a specified API endpoint with a retry mechanism.
+ * Uses caching to store and retrieve the price.
+ * 
+ * @returns {Promise<number>} The near price in USD.
+ */
+```
+
+#### formatPortfolio:
+Formats the given WalletPortfolio data into a readable string output.
+
+```javascript
+/**
+ * Formats the given WalletPortfolio data into a readable string output.
+ * 
+ * @param {IAgentRuntime} runtime - The information about the agent runtime.
+ * @param {WalletPortfolio} portfolio - The portfolio data to be formatted.
+ * @returns {string} The formatted portfolio data as a string.
+ */
+```
+
+#### getFormattedPortfolio:
+Asynchronously retrieves and formats the portfolio of the user.
+
+```javascript
+/**
+ * Asynchronously retrieves and formats the portfolio of the user.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime object for accessing agent specific functionality.
+ * @returns {Promise<string>} A promise that resolves to a string representing the formatted portfolio.
+ */
+```
+
+### Create:
+
+1. **Basic Usage Example:**
+```javascript
+const walletProvider = new WalletProvider('exampleAccountId');
+
+const runtime = new IAgentRuntime();
+const formattedPortfolio = await walletProvider.getFormattedPortfolio(runtime);
+
+console.log(formattedPortfolio);
+```
+
+2. **Modifying and Extending Functionality:**
+The Wallet Provider class can be extended by adding new methods for interacting with different blockchain networks or by enhancing existing functionalities like caching mechanisms or data processing algorithms.
+
+```javascript
+class ExtendedWalletProvider extends WalletProvider {
+   // New methods and functionalities can be added here
+}
+```
+
+3. **Customizing Actions, Providers, and Evaluators:**
+Actions, providers, and evaluators can be customized by extending the existing classes and overriding their methods to tailor them to specific use cases.
+
+```javascript
+class CustomWalletProvider extends WalletProvider {
+   // Override existing methods or add new methods for custom functionality
+}
+
+const customProvider = new CustomWalletProvider('customAccountId');
+```
+
+By following these guidelines and examples, developers can effectively utilize, modify, and extend the functionality of the Wallet Provider class for various applications and use cases.
+## API Reference
+# API Reference Documentation
+
+## Classes
+
+### WalletProvider
+A class representing a Wallet Provider that implements the Provider interface. Provides functionalities to interact with a NEAR wallet, fetch portfolio value, and format portfolio information.
+
+#### Methods
+#### constructor
+Constructor for creating an instance of the class.
+```javascript
+/**
+ * @param {string} accountId - The unique identifier for the account associated with the instance.
+ */
+```
+
+#### get
+Asynchronously retrieves the formatted portfolio using the provided IAgentRuntime.
+```javascript
+/**
+ * @param {IAgentRuntime} runtime - The IAgentRuntime to use for retrieving the portfolio.
+ * @param {Memory} _message - The message object.
+ * @param {State} [_state] - The optional state object.
+ * @returns {Promise<string | null>} A Promise that resolves with the formatted portfolio or null if an error occurs.
+ */
+```
+
+#### connect
+Connects to NEAR blockchain using the provided runtime and sets up the account with the necessary credentials.
+```javascript
+/**
+ * @param {IAgentRuntime} runtime - The runtime object that provides access to settings and other runtime functionalities.
+ * @returns {Promise<Account>} - A promise that resolves to the connected NEAR account object.
+ * @throws {Error} - If NEAR wallet credentials are not configured.
+ */
+```
+
+#### fetchWithRetry
+Fetches data from a specified URL with the option to retry multiple times if the request fails.
+```javascript
+/**
+ * @param {string} url - The URL to fetch data from.
+ * @param {RequestInit} [options={}] - Additional options to include in the fetch request.
+ * @returns {Promise<any>} The response data from the fetch request.
+ */
+```
+
+#### fetchPortfolioValue
+Asynchronously fetches the current portfolio value for the user's account.
+```javascript
+/**
+ * @param {IAgentRuntime} runtime - The Agent Runtime interface.
+ * @returns {Promise<WalletPortfolio>} The portfolio containing the total USD value, total NEAR balance,
+ * and an array of tokens with their respective details.
+ */
+```
+
+#### fetchNearPrice
+Fetches the near price from a specified API endpoint with a retry mechanism.
+```javascript
+/**
+ * @returns {Promise<number>} The near price in USD.
+ */
+```
+
+#### formatPortfolio
+Formats the given WalletPortfolio data into a readable string output.
+```javascript
+/**
+ * @param {IAgentRuntime} runtime - The information about the agent runtime.
+ * @param {WalletPortfolio} portfolio - The portfolio data to be formatted.
+ * @returns {string} The formatted portfolio data as a string.
+ */
+```
+
+#### getFormattedPortfolio
+Asynchronously retrieves and formats the portfolio of the user.
+```javascript
+/**
+ * @param {IAgentRuntime} runtime - The runtime object for accessing agent specific functionality.
+ * @returns {Promise<string>} A promise that resolves to a string representing the formatted portfolio.
+ */
+```
+
+## Interfaces
+
+### TransferContent
+Interface representing the content of a transfer.
+```javascript
+/**
+ * @property {string} recipient - The recipient of the transfer.
+ * @property {string | number} amount - The amount to be transferred.
+ * @property {string} [tokenAddress] - Optional. The token address for native NEAR transfers.
+ */
+```
+
+### NearToken
+Interface representing a token in the NEAR Protocol ecosystem.
+```javascript
+/**
+ * @typedef {object} NearToken
+ * @property {string} name - The name of the token.
+ * @property {string} symbol - The symbol of the token.
+ * @property {number} decimals - The number of decimal places for the token.
+ * @property {string} balance - The balance of the token.
+ * @property {string} uiAmount - The user interface amount of the token.
+ * @property {string} priceUsd - The price of the token in USD.
+ * @property {string} valueUsd - The value of the token in USD.
+ * @property {string} [valueNear] - The optional value of the token in NEAR Protocol tokens.
+ */
+```
+
+### WalletPortfolio
+Interface representing a wallet portfolio.
+```javascript
+/**
+ * @typedef {Object} WalletPortfolio
+ * @property {string} totalUsd - The total amount in USD.
+ * @property {string} [totalNear] - The total amount in NEAR (optional).
+ * @property {Array<NearToken>} tokens - An array of NearToken objects representing different tokens.
+ */
+```
+
+## Types
+
+### NearConfig
+Represents the configuration options for connecting to a NEAR Protocol server.
+
+## Examples
+```javascript
+const walletProvider = new WalletProvider("myAccountId");
+
+walletProvider.connect(runtime)
+  .then(account => {
+    console.log(`Connected to NEAR account: ${account}`);
+    return walletProvider.fetchPortfolioValue(runtime);
+  })
+  .then(portfolio => {
+    console.log(walletProvider.formatPortfolio(runtime, portfolio));
+  })
+  .catch(error => console.error(error));
+``` 
+
+This comprehensive API reference documentation provides detailed information about the classes, methods, interfaces, and types available in the WalletProvider API. Use this reference to integrate and work with the NEAR Protocol wallet functionalities effectively.
+## TODO Items
+**TODO: add functionality to support multiple networks**
+
+**Context:** The current implementation only supports a single network (defined by NEAR_NETWORK and RPC_URL settings). To enhance the flexibility of the application, functionality should be added to support multiple networks. This would allow users to easily switch between different networks without modifying the code.
+
+**Tag:** Feature
+## Common Issues & Troubleshooting
+# Troubleshooting Guide for Package Dependencies and Error Handling
+
+## Common Issues and Solutions:
+1. **Issue:** Dependency version conflicts causing installation errors.
+   **Solution:** Update or downgrade the package versions in the `package.json` file to resolve conflicts.
+
+2. **Issue:** Error handling not implemented properly in methods.
+   **Solution:** Make sure to handle errors using `try/catch` blocks and throw specific errors when necessary.
+
+## Error Messages and Their Meanings:
+1. **Error Message:** `Error: NEAR wallet credentials are not configured.`
+   **Meaning:** The method `connect` requires NEAR wallet credentials to be configured.
+  
+## Debugging Tips:
+- Utilize `console.log` statements to track the flow of execution and identify the source of errors.
+- Consider using debugging tools like `node-inspect` to step through the code and pinpoint issues.
+
+## Configuration Problems:
+- Check if all necessary configuration settings (e.g., NEAR wallet credentials) are properly set up in the environment.
+
+## Compatibility Issues:
+Ensure that the versions of the packages in the `package.json` file are compatible with each other and with the runtime environment.
+
+## Performance Optimization:
+- Use asynchronous programming techniques to improve performance, especially in methods that involve network requests.
+- Cache frequently used data to reduce unnecessary requests and improve response times.
+
+## FAQ Section:
+### Q: How to handle errors when using the `get` method?
+A: You can handle errors by wrapping the method call in a `try/catch` block and returning the error message if an exception occurs.
+
+### Q: Why am I getting a `TypeError: Cannot read property 'runtime' of undefined` error?
+A: This error occurs when the `runtime` object is not properly passed to the method. Make sure to pass the correct arguments when calling the method.
+
+### Q: How to optimize performance when connecting to the NEAR blockchain?
+A: Consider using connection pooling or optimizing network requests to reduce latency and improve performance.
+
+---
+
+By following these troubleshooting steps and best practices, you can effectively address package dependencies and error handling issues in your project.
