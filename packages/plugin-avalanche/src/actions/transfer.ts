@@ -16,12 +16,26 @@ import { Address } from "viem";
 import { validateAvalancheConfig } from "../environment";
 import { TOKEN_ADDRESSES } from "../utils/constants";
 
+/**
+ * Represents the details of a transfer transaction of specific content.
+ * @interface TransferContent
+ * @extends Content
+ * @property {string} tokenAddress - The address of the token used for the transfer.
+ * @property {string} recipient - The recipient of the transfer.
+ * @property {string | number} amount - The amount to be transferred, can be a string or number.
+ */
 export interface TransferContent extends Content {
     tokenAddress: string;
     recipient: string;
     amount: string | number;
 }
 
+/**
+ * Checks if the provided content matches the structure of a TransferContent object.
+ * @param {IAgentRuntime} runtime - The agent runtime object.
+ * @param {any} content - The content to be checked.
+ * @returns {boolean} Returns true if the content matches the TransferContent structure, otherwise false.
+ */
 function isTransferContent(
     runtime: IAgentRuntime,
     content: any
