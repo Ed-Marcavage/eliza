@@ -17,6 +17,18 @@ const PROVIDER_CONFIG = {
     SLIPPAGE: process.env.SLIPPAGE ? parseInt(process.env.SLIPPAGE) : 1,
 };
 
+/**
+ * Interfaz para representar un token cercano
+ * @typedef {Object} NearToken
+ * @property {string} name - El nombre del token
+ * @property {string} symbol - El símbolo del token
+ * @property {number} decimals - El número de decimales del token
+ * @property {string} balance - El saldo del token
+ * @property {string} uiAmount - La cantidad de la interfaz de usuario del token
+ * @property {string} priceUsd - El precio del token en USD
+ * @property {string} valueUsd - El valor del token en USD
+ * @property {string} [valueNear] - El valor del token en NEAR (opcional)
+ */
 export interface NearToken {
     name: string;
     symbol: string;
@@ -28,21 +40,45 @@ export interface NearToken {
     valueNear?: string;
 }
 
+/**
+ * Interfaz que representa el portafolio de una cartera.
+ * @typedef {Object} WalletPortfolio
+ * @property {string} totalUsd - El total en USD en la cartera.
+ * @property {string} [totalNear] - El total en NEAR en la cartera (opcional).
+ * @property {Array<NearToken>} tokens - La lista de tokens NEAR en la cartera.
+ */
 interface WalletPortfolio {
     totalUsd: string;
     totalNear?: string;
     tokens: Array<NearToken>;
 }
 
+/**
+ * Proveedor de Cartera que implementa la interfaz Provider
+ * @class
+ */
 export class WalletProvider implements Provider {
     private cache: NodeCache;
     private account: Account | null = null;
     private keyStore: keyStores.InMemoryKeyStore;
+/**
+ * Constructor de la clase que inicializa un objeto con un ID de cuenta dado.
+ * Además, inicializa un nuevo caché con un tiempo de vida de 5 minutos y un almacén de claves en memoria.
+ * 
+ * @param {string} accountId - El ID de la cuenta asignado al objeto
+ */
     constructor(private accountId: string) {
         this.cache = new NodeCache({ stdTTL: 300 }); // Cache TTL set to 5 minutes
         this.keyStore = new keyStores.InMemoryKeyStore();
     }
 
+/**
+ * Método asincrónico para obtener información de cartera formateada.
+ * @param {IAgentRuntime} runtime - Interfaz que contiene información y funcionalidades del agente en ejecución.
+ * @param {Memory} _message - Objeto que representa un mensaje o evento recibido por el agente.
+ * @param {State} [_state] - Estado opcional que puede ser proporcionado al método.
+ * @returns {Promise<string | null>} Información de cartera formateada o null en caso de error.
+ */
     async get(
         runtime: IAgentRuntime,
         _message: Memory,
@@ -56,6 +92,13 @@ export class WalletProvider implements Provider {
         }
     }
 
+/**
+ * Método asíncrono para establecer una conexión con la red NEAR utilizando las credenciales de la billetera.
+ * 
+ * @param {IAgentRuntime} runtime - Instancia de IAgentRuntime
+ * @returns {Promise<WalletAccount>} Retorna la cuenta de la billetera una vez establecida la conexión
+ * @throws {Error} Error cuando las credenciales de la billetera NEAR no están configuradas
+ */
     public async connect(runtime: IAgentRuntime) {
         if (this.account) return this.account;
 
@@ -88,6 +131,15 @@ export class WalletProvider implements Provider {
         return this.account;
     }
 
+/**
+ * Función que realiza una solicitud a un URL con la posibilidad de reintento en caso de error,
+ * hasta un máximo de intentos definido en PROVIDER_CONFIG.MAX_RETRIES.
+ * 
+ * @param {string} url - El URL al que se realizará la solicitud.
+ * @param {RequestInit} options - Opciones adicionales para la solicitud.
+ * @returns {Promise<any>} - Promesa que se resuelve con la respuesta en formato JSON si la solicitud es exitosa.
+ * @throws {Error} - Error HTTP si la respuesta no es exitosa después de los reintentos.
+ */
     private async fetchWithRetry(
         url: string,
         options: RequestInit = {}
@@ -117,6 +169,14 @@ export class WalletProvider implements Provider {
         throw lastError!;
     }
 
+/**
+ * 
+ * Método asíncrono para obtener el valor de la cartera.
+ * 
+ * @param {IAgentRuntime} runtime - Interfaz del tiempo de ejecución del agente.
+ * @returns {Promise<WalletPortfolio>} Retorna la cartera del usuario.
+ * 
+ */
     async fetchPortfolioValue(
         runtime: IAgentRuntime
     ): Promise<WalletPortfolio> {
@@ -165,6 +225,10 @@ export class WalletProvider implements Provider {
         }
     }
 
+/**
+* Método privado asíncrono para obtener el precio cercano.
+* @returns {Promise<number>} - El precio cercano en USD.
+*/
     private async fetchNearPrice(): Promise<number> {
         const cacheKey = "near-price";
         const cachedPrice = this.cache.get<number>(cacheKey);
@@ -186,6 +250,14 @@ export class WalletProvider implements Provider {
         }
     }
 
+/**
+ * Formatea y genera un resumen legible del portafolio, incluyendo la información del sistema del personaje, ID de cuenta, valor total en USD y NEAR, saldos de tokens y precios de mercado.
+ * 
+ * @param {IAgentRuntime} runtime - La instancia del tiempo de ejecución del agente.
+ * @param {WalletPortfolio} portfolio - El portafolio de la billetera que se formateará.
+ * @returns {string} Un resumen formateado del portafolio con la información detallada.
+ */
+           
     formatPortfolio(
         runtime: IAgentRuntime,
         portfolio: WalletPortfolio
@@ -209,6 +281,12 @@ export class WalletProvider implements Provider {
         return output;
     }
 
+/**
+ * Método asincrónico para obtener el portafolio formateado.
+ * 
+ * @param {IAgentRuntime} runtime - El entorno de ejecución del agente.
+ * @returns {Promise<string>} La información del portafolio formateada como cadena.
+ */
     async getFormattedPortfolio(runtime: IAgentRuntime): Promise<string> {
         try {
             const portfolio = await this.fetchPortfolioValue(runtime);
