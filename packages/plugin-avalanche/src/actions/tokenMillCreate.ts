@@ -14,11 +14,25 @@ import {
 import { validateAvalancheConfig } from "../environment";
 import { createMarketAndToken } from "../utils/tokenMill";
 
+/**
+ * Interface for creating a new token mill content.
+ * @interface
+ * @extends Content
+ * @property {string} name - The name of the content.
+ * @property {string} symbol - The symbol of the content.
+ */
 export interface TokenMillCreateContent extends Content {
     name: string;
     symbol: string;
 }
 
+/**
+ * Check if the given content is in the format of TokenMillCreateContent
+ * 
+ * @param {IAgentRuntime} runtime - The runtime object
+ * @param {any} content - The content to be checked
+ * @returns {boolean} - Returns true if the content is TokenMillCreateContent, false otherwise
+ */
 function isTokenMillCreateContent(
     runtime: IAgentRuntime,
     content: any
