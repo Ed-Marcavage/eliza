@@ -7,7 +7,15 @@ export const avalancheEnvSchema = z.object({
         .min(1, "Avalanche private key is required"),
 });
 
+/**
+ * Type definition for AvalancheConfig, inferred from the avalancheEnvSchema.
+ */
 export type AvalancheConfig = z.infer<typeof avalancheEnvSchema>;
+/**
+ * Validates the Avalanche configuration settings and returns a valid Avalanche configuration object.
+ * @param {IAgentRuntime} runtime - The runtime environment to retrieve settings from.
+ * @returns {Promise<AvalancheConfig>} The validated Avalanche configuration.
+ */
 export async function validateAvalancheConfig(
     runtime: IAgentRuntime
 ): Promise<AvalancheConfig> {
