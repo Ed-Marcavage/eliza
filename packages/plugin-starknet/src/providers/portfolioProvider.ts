@@ -10,21 +10,45 @@ import { fetchWithRetry, getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 import { PORTFOLIO_TOKENS } from "./token.ts";
 
+/**
+ * Object containing prices of different cryptocurrencies in USD.
+ * @typedef {Object} CoingeckoPrices
+ * @property {Object.<string, {usd: number}>} - The key is the name of the cryptocurrency and the value is an object with the price in USD.
+ */
 type CoingeckoPrices = {
     [cryptoName: string]: { usd: number };
 };
 
+/**
+ * Represents a mapping of token addresses to their corresponding balances, where 
+ * the token address is a string key and the balance is a bigint value.
+ */
 type TokenBalances = {
     [tokenAddress: string]: bigint;
 };
 
+/**
+ * A class representing a Wallet Provider.
+ */
 export class WalletProvider {
     private runtime: IAgentRuntime;
 
+/**
+ * Constructor for creating a new instance of the class.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime object used by the agent.
+ */
     constructor(runtime: IAgentRuntime) {
         this.runtime = runtime;
     }
 
+/**
+ * Retrieves the wallet portfolio by fetching the balances of all tokens in the user's wallet.
+ * If the data is found in the cache, it returns the cached values.
+ * Otherwise, it fetches the balances for each token sequentially to prevent API issues.
+ * Upon fetching the balances, it stores the data in the cache for future use with a 3-hour expiration.
+ * @returns {Promise<TokenBalances>} The token balances in the wallet portfolio.
+ */
     async getWalletPortfolio(): Promise<TokenBalances> {
         const cacheKey = `walletPortfolio-${this.runtime.agentId}`;
         const cachedValues =
@@ -51,6 +75,12 @@ export class WalletProvider {
         return balances;
     }
 
+/**
+ * Retrieves the USD values of tokens from Coingecko API.
+ * If cached data is available, returns the cached values.
+ * Otherwise, fetches the latest values, stores them in cache for 30 minutes, and returns them.
+ * @returns {Promise<CoingeckoPrices>} The USD values of tokens
+ */
     async getTokenUsdValues(): Promise<CoingeckoPrices> {
         const cacheKey = "tokenUsdValues";
         const cachedValues =
