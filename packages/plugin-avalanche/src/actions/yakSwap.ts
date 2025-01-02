@@ -16,6 +16,15 @@ import { Address } from "viem";
 import { validateAvalancheConfig } from "../environment";
 import { TOKEN_ADDRESSES, YAK_SWAP_CONFIG } from "../utils/constants";
 
+/**
+ * Interface for defining the swap content information.
+ * Extends from the Content interface.
+ * @typedef {object} SwapContent
+ * @property {string} fromTokenAddress - The address of the token to swap from.
+ * @property {string} toTokenAddress - The address of the token to swap to.
+ * @property {string} [recipient] - Optional recipient address.
+ * @property {string|number} amount - The amount of tokens to swap.
+ */
 export interface SwapContent extends Content {
     fromTokenAddress: string;
     toTokenAddress: string;
@@ -23,6 +32,13 @@ export interface SwapContent extends Content {
     amount: string | number;
 }
 
+/**
+ * Check if the provided content is of type SwapContent.
+ * 
+ * @param {IAgentRuntime} runtime - The agent runtime object.
+ * @param {any} content - The content to check.
+ * @returns {boolean} - True if the content is of type SwapContent, false otherwise.
+ */
 function isSwapContent(
     runtime: IAgentRuntime,
     content: any
