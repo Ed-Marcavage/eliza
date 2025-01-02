@@ -49,7 +49,6 @@ export class AIService {
             // First try with generous limit
             let finalPrompt = this.truncateCodeBlock(prompt, 8000);
             // Truncate the prompt if it contains code blocks
-            let finalPrompt = this.truncateCodeBlock(prompt);
 
             // Only append language instruction if not English
             const normalizedLanguage = this.configuration.language.toLowerCase().trim();
