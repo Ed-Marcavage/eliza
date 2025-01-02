@@ -48,6 +48,12 @@ export const parseFormatedPercentage = (percent: string) =>
         100 * 10 ** PERCENTAGE_INPUT_PRECISION
     );
 
+/**
+ * Interface for options when parsing currency amounts.
+ * @typedef {Object} ParseCurrencyAmountOptions
+ * @property {number} fixed - The number of decimal places to round to.
+ * @property {number} [significant] - The number of significant digits to round to.
+ */
 interface ParseCurrencyAmountOptions {
     fixed: number;
     significant?: number;
@@ -73,6 +79,14 @@ export const formatPercentage = (percentage: Percent) => {
     return `${exact ? "" : "~"}${formatedPercentage}%`;
 };
 
+/**
+ * Represents a configuration object for retrying operations.
+ * @typedef {Object} RetryConfig
+ * @property {number} [maxRetries] - The maximum number of retries allowed.
+ * @property {number} [delay] - The initial delay before the first retry.
+ * @property {number} [maxDelay] - The maximum delay allowed for retries.
+ * @property {Function} [backoff] - A function that calculates the delay between retries based on parameters.
+ */
 export type RetryConfig = {
     maxRetries?: number;
     delay?: number;
@@ -80,6 +94,19 @@ export type RetryConfig = {
     backoff?: (retryCount: number, delay: number, maxDelay: number) => number;
 };
 
+/**
+ * Fetches data from a URL with retry mechanism based on the provided configuration.
+ * @template T
+ * @param {string} url The URL to fetch data from.
+ * @param {RequestInit} [options] The options to be passed to the fetch API.
+ * @param {RetryConfig} [config] The configuration object for retry settings.
+ * @param {number} [config.maxRetries=3] The maximum number of allowed retries.
+ * @param {number} [config.delay=1000] The base delay in milliseconds between retries.
+ * @param {number} [config.maxDelay=10000] The maximum delay in milliseconds between retries.
+ * @param {function} [config.backoff] The backoff function that determines the delay between retries.
+ * @returns {Promise<T>} A promise that resolves with the fetched data if successful.
+ * @throws {Error} If the maximum number of retries is exhausted and the fetch still fails.
+ */
 export async function fetchWithRetry<T>(
     url: string,
     options?: RequestInit,
