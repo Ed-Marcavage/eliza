@@ -15,12 +15,28 @@ import { KeyPairString } from "near-api-js/lib/utils";
 import { utils as nearUtils } from "near-api-js";
 // import BigNumber from "bignumber.js";
 
+/**
+ * Interfaz para representar la transferencia de contenido, extiende la interfaz Content.
+ * 
+ * @interface
+ * @typedef {Object} TransferContent
+ * @property {string} recipient - El destinatario de la transferencia.
+ * @property {string | number} amount - La cantidad de tokens a transferir.
+ * @property {string} [tokenAddress] - Dirección del token (opcional para transferencias nativas NEAR).
+ */
 export interface TransferContent extends Content {
     recipient: string;
     amount: string | number;
     tokenAddress?: string; // Optional for native NEAR transfers
 }
 
+/**
+ * Función para verificar si el contenido es una transferencia.
+ * 
+ * @param {IAgentRuntime} runtime - El entorno de ejecución del agente.
+ * @param {any} content - El contenido a verificar.
+ * @returns {boolean} Devuelve verdadero si el contenido es una transferencia, falso en caso contrario.
+ */
 function isTransferContent(
     runtime: IAgentRuntime,
     content: any
@@ -56,6 +72,15 @@ Extract the following information about the requested token transfer:
 
 Respond with a JSON markdown block containing only the extracted values.`;
 
+/**
+ * Función asincrónica para transferir NEAR.
+ * 
+ * @param {IAgentRuntime} runtime - Objeto de tiempo de ejecución del agente.
+ * @param {string} recipient - Dirección del receptor de la transferencia NEAR.
+ * @param {string} amount - Cantidad de NEAR a transferir en formato de cadena.
+ * @returns {Promise<string>} Promesa que devuelve el hash de la transacción.
+ * @throws {Error} Si las credenciales de la billetera NEAR no están configuradas.
+ */
 async function transferNEAR(
     runtime: IAgentRuntime,
     recipient: string,
