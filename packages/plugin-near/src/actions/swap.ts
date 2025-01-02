@@ -22,6 +22,12 @@ import {
 import { walletProvider } from "../providers/wallet";
 import { KeyPairString } from "near-api-js/lib/utils";
 
+/**
+ * Función asíncrona para verificar el saldo de almacenamiento de un contrato para una cuenta específica.
+ * @param {any} account - La cuenta para la cual se verificará el saldo de almacenamiento.
+ * @param {string} contractId - El ID del contrato del cual se verificará el saldo de almacenamiento.
+ * @returns {Promise<boolean>} Devuelve un valor booleano que indica si el saldo de almacenamiento es diferente de cero y no es nulo.
+ */
 async function checkStorageBalance(
     account: any,
     contractId: string
@@ -40,6 +46,16 @@ async function checkStorageBalance(
 }
 
 // TODO: add functionality to support multiple networks
+/**
+ * Función asíncrona para intercambiar tokens.
+ * 
+ * @param {IAgentRuntime} runtime - Entorno de ejecución de Agente
+ * @param {string} inputTokenId - ID del token de entrada
+ * @param {string} outputTokenId - ID del token de salida
+ * @param {string} amount - Cantidad a intercambiar
+ * @param {number} slippageTolerance - Tolerancia de deslizamiento (por defecto, 0.01)
+ * @returns {Promise<any>} - Promesa que resuelve en una transacción de intercambio o error
+ */
 async function swapToken(
     runtime: IAgentRuntime,
     inputTokenId: string,
