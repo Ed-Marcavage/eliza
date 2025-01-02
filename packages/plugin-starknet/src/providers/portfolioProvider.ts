@@ -10,21 +10,42 @@ import { fetchWithRetry, getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 import { PORTFOLIO_TOKENS } from "./token.ts";
 
+/**
+ * A type representing the prices of cryptocurrencies from the Coingecko API.
+ * @typedef {Object.<string, { usd: number }>} CoingeckoPrices
+ */
 type CoingeckoPrices = {
     [cryptoName: string]: { usd: number };
 };
 
+/**
+ * Represents the balances of different tokens by storing the amount of each token as a BigInt value.
+ */
 type TokenBalances = {
     [tokenAddress: string]: bigint;
 };
 
+/**
+ * Class representing a Wallet Provider.
+ */
+
 export class WalletProvider {
     private runtime: IAgentRuntime;
 
+/**
+ * Constructor for creating an instance of the class.
+ * @param {IAgentRuntime} runtime - The runtime object to be assigned to the class property.
+ */
     constructor(runtime: IAgentRuntime) {
         this.runtime = runtime;
     }
 
+/**
+ * Asynchronously retrieves the wallet portfolio by fetching the token balances for each token in the portfolio. 
+ * Uses caching to speed up subsequent calls and prevent unnecessary API requests.
+ * 
+ * @returns {Promise<TokenBalances>} The token balances for the wallet portfolio.
+ */
     async getWalletPortfolio(): Promise<TokenBalances> {
         const cacheKey = `walletPortfolio-${this.runtime.agentId}`;
         const cachedValues =
@@ -51,6 +72,14 @@ export class WalletProvider {
         return balances;
     }
 
+/**
+ * Retrieves the current USD values of tokens from Coingecko API.
+ * If the values are already cached, returns the cached data.
+ * Otherwise, makes an API request to Coingecko to fetch the values,
+ * caches the result, and returns the values.
+ * 
+ * @returns {Promise<CoingeckoPrices>} The current USD values of tokens
+ */
     async getTokenUsdValues(): Promise<CoingeckoPrices> {
         const cacheKey = "tokenUsdValues";
         const cachedValues =
