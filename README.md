@@ -1,147 +1,488 @@
-# Eliza 🤖
+# @elizaos/plugin-near Documentation
 
-<div align="center">
-  <img src="./docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
-</div>
+## Overview
+### Purpose
+The `@elizaos/plugin-near` package serves as a comprehensive plugin for managing NEAR Protocol related functionalities and transactions within applications. It offers various classes, interfaces, types, and functions to facilitate tasks like transferring NEAR tokens, checking balances, performing token swaps, and validating NEAR configurations.
 
-<div align="center">
+### Key Features
+- **WalletProvider Class**: Represents a wallet provider implementing the Provider interface.
+- **TransferContent Interface**: Data structure for transfer transaction details.
+- **NearToken Interface**: Represents NEAR token properties.
+- **WalletPortfolio Interface**: Represents a wallet's portfolio with token details.
+- **NearConfig Type**: Configuration type for NEAR environment variables.
+- **checkStorageBalance Function**: Checks the storage balance of an account.
+- **swapToken Function**: Performs token swap transactions.
+- **isTransferContent Function**: Checks if content is a TransferContent object.
+- **transferNEAR Function**: Transfers NEAR tokens to a recipient.
+- **getConfig Function**: Retrieves configuration based on the environment.
+- **validateNearConfig Function**: Validates NEAR configuration parameters.
 
-📖 [Documentation](https://elizaos.github.io/eliza/) | 🎯 [Examples](https://github.com/thejoven/awesome-eliza)
+## Installation
+## Installation Instructions
 
-</div>
+### 1. Add the plugin to your ElizaOS project:
 
-## 🌍 README Translations
+1. Add the following to your agent/package.json dependencies:
+   ```json
+   {
+     "dependencies": {
+       "@elizaos/plugin-near": "workspace:*"
+     }
+   }
+   ```
 
-[中文说明](./README_CN.md) | [日本語の説明](./README_JA.md) | [한국어 설명](./README_KOR.md) | [Français](./README_FR.md) | [Português](./README_PTBR.md) | [Türkçe](./README_TR.md) | [Русский](./README_RU.md) | [Español](./README_ES.md) | [Italiano](./README_IT.md) | [ไทย](./README_TH.md) | [Deutsch](./README_DE.md) | [Tiếng Việt](./README_VI.md) | [עִברִית](https://github.com/elizaos/Elisa/blob/main/README_HE.md) | [Tagalog](./README_TG.md) | [Polski](./README_PL.md)
+2. cd into the agent/ directory.
+3. Run `pnpm install` to install the new dependency.
+4. Run `pnpm build` to build the project with the new plugin.
 
-## 🚩 Overview
+### 2. Import and Use the Plugin:
 
-<div align="center">
-  <img src="./docs/static/img/eliza_diagram.jpg" alt="Eliza Diagram" width="100%" />
-</div>
+- Import the plugin using:
+  ```javascript
+  import { nearPlugin } from "@elizaos/plugin-near";
+  ```
 
-## ✨ Features
+- Add it to the AgentRuntime plugins array in your code.
 
-- 🛠️ Full-featured Discord, Twitter and Telegram connectors
-- 🔗 Support for every model (Llama, Grok, OpenAI, Anthropic, etc.)
-- 👥 Multi-agent and room support
-- 📚 Easily ingest and interact with your documents
-- 💾 Retrievable memory and document store
-- 🚀 Highly extensible - create your own actions and clients
-- ☁️ Supports many models (local Llama, OpenAI, Anthropic, Groq, etc.)
-- 📦 Just works!
+### 3. Integration Example:
 
-## Video Tutorials
+```typescript
+import { nearPlugin } from "@elizaos/plugin-near";
 
-[AI Agent Dev School](https://www.youtube.com/watch?v=ArptLpQiKfI&list=PLx5pnFXdPTRzWla0RaOxALTSTnVq53fKL)
-
-## 🎯 Use Cases
-
-- 🤖 Chatbots
-- 🕵️ Autonomous Agents
-- 📈 Business Process Handling
-- 🎮 Video Game NPCs
-- 🧠 Trading
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- [Python 2.7+](https://www.python.org/downloads/)
-- [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [pnpm](https://pnpm.io/installation)
-
-> **Note for Windows Users:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) is required.
-
-### Use the Starter (Recommended)
-
-```bash
-git clone https://github.com/elizaos/eliza-starter.git
-cd eliza-starter
-cp .env.example .env
-pnpm i && pnpm build && pnpm start
-```
-Once the agent is running, You should see the message to run "pnpm start:client" at the end.
-Open another terminal and move to same directory and then run below command and follow the URL to chat to your agent.
-```bash
-pnpm start:client
+return new AgentRuntime({
+    // other configuration...
+    plugins: [
+        nearPlugin,
+        // other plugins...
+    ],
+});
 ```
 
-Then read the [Documentation](https://elizaos.github.io/eliza/) to learn how to customize your Eliza.
+### 4. Verification Steps:
 
-### Manually Start Eliza (Only recommended if you know what you are doing)
-
-```bash
-# Clone the repository
-git clone https://github.com/elizaos/eliza.git
-
-# Checkout the latest release
-# This project iterates fast, so we recommend checking out the latest release
-git checkout $(git describe --tags --abbrev=0)
+Ensure successful integration by checking for the following message in the console:
+```
+✓ Registering action: <plugin actions>
 ```
 
-### Start Eliza with Gitpod
+Make sure to have the required peer dependencies installed in your project as well.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/elizaos/eliza/tree/main)
+## Configuration
+# Configuration Documentation
 
-### Edit the .env file
+## Required Environment Variables and Their Purpose
 
-Copy .env.example to .env and fill in the appropriate values.
+1. `NEAR_ENV`: Used as a fallback value if `NEAR_ENV` is not provided in the environment.
+2. `REACT_APP_REF_SDK_ENV`: Environment variable for setting the reference SDK environment.
+3. `NEAR_WALLET_SECRET_KEY`: Secret key for Near wallet.
+4. `NEAR_WALLET_PUBLIC_KEY`: Public key for Near wallet.
+5. `NEAR_ADDRESS`: NEAR address used for runtime settings.
+6. `SLIPPAGE`: Slippage setting for runtime or from environment variable `SLIPPAGE`.
+7. `RPC_URL`: RPC URL setting for blockchain interactions.
+8. `NEAR_NETWORK`: Network ID for NEAR network, defaults to "testnet".
+  
+## Example .env File
 
+```plaintext
+NEAR_ENV=
+REACT_APP_REF_SDK_ENV=
+NEAR_WALLET_SECRET_KEY=
+NEAR_WALLET_PUBLIC_KEY=
+NEAR_ADDRESS=
+SLIPPAGE=
+RPC_URL=
+NEAR_NETWORK=
+```  
+
+Please make sure to configure these environment variables in the .env file. Ensure that the .env file is added to the .gitignore to prevent it from being committed to the repository.
+
+## Features
+
+### Actions
+No actions documentation available.
+
+### Providers
+### Wallet Provider
+This provider allows users to fetch and display NEAR wallet information.
+
+#### Methods
+Focus on the get() method and its functionality.
+
+#### Usage
+```typescript
+import { IAgentRuntime, Memory, Provider, State } from "@elizaos/core";
+import { walletProvider } from "./providers/wallet";
+
+const runtime: IAgentRuntime;
+const message: Memory;
+const state: State;
+
+const result = await walletProvider.get(runtime, message, state);
+console.log(result);
 ```
-cp .env.example .env
+
+
+
+### Evaluators
+No evaluators documentation available.
+
+## Usage Examples
+### providers/wallet.ts
+
+### Common Use Cases
+1. Create a new instance of the WalletProvider class and connect to a NEAR wallet using the provided runtime.
+```javascript
+const walletProvider = new WalletProvider("myAccountId");
+const account = await walletProvider.connect(runtime);
 ```
 
-Note: .env is optional. If you're planning to run multiple distinct agents, you can pass secrets through the character JSON
-
-### Automatically Start Eliza
-
-This will run everything to set up the project and start the bot with the default character.
-
-```bash
-sh scripts/start.sh
+2. Fetch the current portfolio value and retrieve the formatted portfolio information.
+```javascript
+const formattedPortfolio = await walletProvider.getFormattedPortfolio(runtime);
+console.log(formattedPortfolio);
 ```
 
-### Edit the character file
+### Best Practices
+- Ensure to handle errors gracefully when fetching data from external APIs to avoid application crashes.
+- Utilize caching mechanisms to store and retrieve data efficiently for improved performance.
 
-1. Open `packages/core/src/defaultCharacter.ts` to modify the default character. Uncomment and edit.
+### actions/transfer.ts
 
-2. To load custom characters:
-    - Use `pnpm start --characters="path/to/your/character.json"`
-    - Multiple character files can be loaded simultaneously
-3. Connect with X (Twitter)
-    - change `"clients": []` to `"clients": ["twitter"]` in the character file to connect with X
+### Common Use Cases
+1. **Transfer NEAR tokens:** Transfer NEAR tokens from one NEAR account to another.
+   ```typescript
+   import { transferNEAR } from './actions/transfer';
 
-### Manually Start Eliza
+   const recipient = 'recipient.near';
+   const amount = '10';
+   transferNEAR(runtime, recipient, amount)
+     .then((transactionHash) => {
+       console.log(`Transfer successful. Transaction Hash: ${transactionHash}`);
+     })
+     .catch((error) => {
+       console.error(error.message);
+     });
+   ```
 
-```bash
-pnpm i
-pnpm build
-pnpm start
+2. **Check if content is TransferContent:** Validate if the provided content is a TransferContent object.
+   ```typescript
+   import { isTransferContent } from './actions/transfer';
 
-# The project iterates fast, sometimes you need to clean the project if you are coming back to the project
-pnpm clean
+   const content = {
+     recipient: 'recipient.near',
+     amount: '10',
+     tokenAddress: 'token.near'
+   };
+
+   const isTransfer = isTransferContent(runtime, content);
+   if (isTransfer) {
+     console.log('Content is a valid TransferContent object');
+   } else {
+     console.log('Content is not a TransferContent object');
+   }
+   ```
+
+### Best Practices
+- **Validate Content:** Always validate the content using `isTransferContent` function before performing a transfer to ensure data integrity.
+- **Handle Errors:** Use `.catch` block to handle any errors that may occur during the transfer process to provide appropriate feedback to the user.
+
+### environment.ts
+
+- First use case with code example:
+```typescript
+import { getConfig } from 'environment';
+
+const config = getConfig('production');
+console.log(config);
 ```
 
-#### Additional Requirements
+- Second use case with code example:
+```typescript
+import { validateNearConfig } from 'environment';
+import { IAgentRuntime } from 'types';
 
-You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
-
+const runtime: IAgentRuntime = {
+  env: 'production',
+  app_id: 'myapp',
+  api_key: 'myapikey'
+};
+const validatedConfig = await validateNearConfig(runtime);
+console.log(validatedConfig);
 ```
-pnpm install --include=optional sharp
+
+- Best practice 1:
+Make sure to provide a valid environment parameter when using the getConfig function to retrieve the configuration object.
+
+- Best practice 2:
+Ensure that the runtime object passed to validateNearConfig includes all the necessary properties for validating the Near configuration.
+
+### actions/swap.ts
+
+### Common Use Cases
+1. Checking the storage balance of a specific account:
+```typescript
+const account = { address: "0x1234567890" };
+const contractId = "0xabcdef";
+const hasBalance = await checkStorageBalance(account, contractId);
+console.log(hasBalance); // true or false
 ```
 
-### Community & contact
+2. Performing a token swap transaction:
+```typescript
+const runtime = { /* agent runtime object */ };
+const inputTokenId = "0x123456";
+const outputTokenId = "0xabcdef";
+const amount = "100";
+const slippageTolerance = 0.01;
+const transactions = await swapToken(runtime, inputTokenId, outputTokenId, amount, slippageTolerance);
+console.log(transactions); // array of transactions
+```
 
-- [GitHub Issues](https://github.com/elizaos/eliza/issues). Best for: bugs you encounter using Eliza, and feature proposals.
-- [Discord](https://discord.gg/ai16z). Best for: sharing your applications and hanging out with the community.
+### Best Practices
+- When calling `checkStorageBalance`, ensure that the `account` object contains a valid address and the `contractId` is the correct contract ID.
+- When calling `swapToken`, make sure to provide the necessary parameters such as `runtime`, `inputTokenId`, `outputTokenId`, `amount`, and optionally `slippageTolerance` for a smooth token swap transaction.
 
-## Contributors
+## API Reference
+### providers/wallet.ts
 
-<a href="https://github.com/elizaos/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=elizaos/eliza" />
-</a>
+#### Classes
 
-## Star History
+##### WalletProvider
 
-[![Star History Chart](https://api.star-history.com/svg?repos=elizaos/eliza&type=Date)](https://star-history.com/#elizaos/eliza&Date)
+/**
+ * Represents a Wallet Provider that implements the Provider interface.
+ */
+ */
+
+#### Interfaces
+
+##### NearToken
+
+/**
+ * Represents a near token with its properties.
+ * @typedef {object} NearToken
+ * @property {string} name - The name of the token.
+ * @property {string} symbol - The symbol of the token.
+ * @property {number} decimals - The number of decimal places for the token.
+ * @property {string} balance - The balance of the token.
+ * @property {string} uiAmount - The UI amount of the token.
+ * @property {string} priceUsd - The price of the token in USD.
+ * @property {string} valueUsd - The value of the token in USD.
+ * @property {string} [valueNear] - The value of the token in Near protocol.
+ */
+
+##### WalletPortfolio
+
+/**
+ * Interface representing a Wallet Portfolio.
+ * @typedef {Object} WalletPortfolio
+ * @property {string} totalUsd - The total value in USD.
+ * @property {string} [totalNear] - The total value in NEAR tokens (optional).
+ * @property {Array<NearToken>} tokens - An array of NearToken objects.
+ */
+
+#### Methods
+
+##### constructor
+
+/**
+ * Constructor for creating a new instance of the class.
+ * @param {string} accountId - The account ID to associate with the instance
+ */
+
+##### get
+
+/**
+ * Retrieves the formatted portfolio from the wallet provider.
+ * 
+ * @param {IAgentRuntime} runtime - The Agent Runtime instance.
+ * @param {Memory} _message - The message object from memory.
+ * @param {State} [_state] - Optional state object.
+ * @returns {Promise<string | null>} The formatted portfolio or null if an error occurs.
+ */
+
+##### connect
+
+/**
+ * Connect to NEAR wallet using the provided runtime.
+ * @param {IAgentRuntime} runtime - The runtime to use for connecting to NEAR wallet.
+ * @returns {Promise<Account>} - The NEAR wallet account.
+ * @throws {Error} - If NEAR wallet credentials are not configured.
+ */
+
+##### fetchWithRetry
+
+/**
+ * Fetch data from a URL with retry mechanism.
+ * 
+ * @param {string} url - The URL to fetch data from.
+ * @param {RequestInit} options - The options for the fetch request.
+ * @returns {Promise<any>} - A promise that resolves to the fetched data.
+ */
+
+##### fetchPortfolioValue
+
+/**
+ * Fetches the current portfolio value by connecting to the account and retrieving the balance.
+ * If a cached value is found, it returns the cached value instead of fetching again.
+ * Converts the balance from yoctoNEAR to NEAR and fetches the NEAR price in USD.
+ * Calculates the total portfolio value in USD and constructs a `WalletPortfolio` object with the details.
+ * Caches the portfolio value for future use.
+ * 
+ * @param {IAgentRuntime} runtime - The agent runtime to connect to the account.
+ * @returns {Promise<WalletPortfolio>} The wallet portfolio object with total USD value, total NEAR balance,
+ * tokens information including name, symbol, decimals, balance, price in USD, and value in USD.
+ * @throws {Error} If there is an error while fetching the portfolio value.
+ */
+
+##### fetchNearPrice
+
+/**
+ * Fetches the NEAR token price from the CoinGecko API.
+ * Checks the cache for a cached price first and returns that if available.
+ * If not cached, makes a request to the CoinGecko API to fetch the price,
+ * stores it in the cache, and returns the price.
+ * If an error occurs during the process, logs the error and returns 0.
+ * @returns {Promise<number>} The NEAR token price in USD.
+ */
+
+##### formatPortfolio
+
+/**
+ * Formats the portfolio information into a human-readable string.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime information for the agent.
+ * @param {WalletPortfolio} portfolio - The portfolio containing wallet details.
+ * @returns {string} - The formatted portfolio information.
+ */
+
+##### getFormattedPortfolio
+
+/**
+ * Asynchronously retrieves the portfolio value and formats it into a string.
+ * 
+ * @param {IAgentRuntime} runtime - The runtime object that contains necessary information for fetching the portfolio.
+ * @returns {Promise<string>} A promise that resolves to a formatted string representing the portfolio value.
+ */
+
+
+### actions/transfer.ts
+
+#### Interfaces
+
+##### TransferContent
+
+/**
+ * Interface representing the data needed for a transfer transaction.
+ * Extends Content interface.
+ * @typedef {object} TransferContent
+ * @property {string} recipient - The recipient address for the transfer.
+ * @property {string|number} amount - The amount to transfer, can be either a string or a number.
+ * @property {string} [tokenAddress] - Optional token address for native NEAR transfers.
+ */
+
+#### Functions
+
+##### isTransferContent
+
+/**
+ * Check if the provided content is a TransferContent object.
+ *
+ * @param {IAgentRuntime} runtime - The runtime environment for the agent.
+ * @param {any} content - The content to check.
+ * @returns {boolean} - Returns true if the content is a TransferContent object.
+ */
+
+##### transferNEAR
+
+/**
+ * Transfer NEAR tokens from the current NEAR account to a recipient.
+ * @param {IAgentRuntime} runtime - The agent runtime interface.
+ * @param {string} recipient - The recipient's NEAR account ID.
+ * @param {string} amount - The amount of NEAR tokens to transfer.
+ * @returns {Promise<string>} - A Promise that resolves with the transaction hash of the transfer.
+ * @throws {Error} - If NEAR wallet credentials are not configured.
+ */
+
+
+### environment.ts
+
+#### Types
+
+##### NearConfig
+
+/**
+ * Type definition for the configuration of NEAR environment variables.
+ */
+
+#### Functions
+
+##### getConfig
+
+/**
+ * Function to get the configuration object based on the environment provided or default values from ENV or process environment variables.
+ * @param {string | undefined | null} env - The environment to retrieve the configuration for. Defaults to ENV, process.env.NEAR_ENV, or process.env.REACT_APP_REF_SDK_ENV if not provided.
+ * @returns {object} - The configuration object based on the provided environment or defaults if not found.
+ */
+
+##### validateNearConfig
+
+/**
+ * Validates the Near configuration parameters based on the provided runtime.
+ * Retrieves the configuration values from the provided runtime and environment variables,
+ * and then applies schema validation to ensure the correctness of the NearConfig.
+ *
+ * @param {IAgentRuntime} runtime - The runtime object containing configuration settings.
+ * @returns {Promise<NearConfig>} The validated Near configuration object.
+ * @throws {Error} If the Near configuration validation fails.
+ */
+
+
+### actions/swap.ts
+
+#### Functions
+
+##### checkStorageBalance
+
+/**
+ * Checks the storage balance of a specified account by calling the view function "storage_balance_of" on the given contract ID.
+ * @param {any} account - The account object used to make the view function call.
+ * @param {string} contractId - The contract ID where the view function is called to check the storage balance.
+ * @returns {Promise<boolean>} A Promise that resolves to true if the storage balance is not null and the total balance is not "0", otherwise resolves to false.
+ */
+
+##### swapToken
+
+/**
+ * Perform a token swap transaction.
+ * 
+ * @param {IAgentRuntime} runtime - The agent runtime.
+ * @param {string} inputTokenId - The ID of the input token.
+ * @param {string} outputTokenId - The ID of the output token.
+ * @param {string} amount - The amount of tokens to swap.
+ * @param {number} [slippageTolerance=0.01] - The allowable slippage tolerance for the swap.
+ * @returns {Promise<any>} A promise that resolves to an array of transactions for the token swap.
+ */
+
+
+## Development
+
+### TODO Items
+### Items
+1. TODO: add functionality to support multiple networks
+   - Context: Function `swapToken` needs to be updated to support multiple networks for swapping tokens.
+   - Type: enhancement
+
+### Troubleshooting
+### Common Issues
+1. Issue: NEAR wallet credentials not configured
+   - Cause: The NEAR wallet credentials are missing or not properly configured in the runtime settings.
+   - Solution: Ensure that the NEAR wallet secret key and public key are set correctly in the runtime settings.
+
+### Debugging Tips
+- Check the NEAR wallet credentials configuration in the runtime settings.
+- Verify that the NEAR wallet secret key and public key are correctly set before executing any wallet-related functions.
+
+### FAQ
+Q: How can I check if the NEAR wallet credentials are configured properly?
+A: You can verify the NEAR wallet credentials by checking the runtime settings for the NEAR wallet secret key and public key. Make sure they are set correctly to connect to the NEAR wallet successfully.
