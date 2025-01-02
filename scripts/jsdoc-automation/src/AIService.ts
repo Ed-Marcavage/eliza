@@ -59,8 +59,6 @@ export class AIService {
 
             console.log(`Generating comment for prompt of length: ${finalPrompt.length}`);
 
-            console.log(`Generating comment for prompt of length: ${finalPrompt.length}`);
-
             try {
                 const response = await this.chatModel.invoke(finalPrompt);
                 return response.content as string;
@@ -619,7 +617,6 @@ export class AIService {
         // Extract code blocks
         const codeBlockRegex = /```[\s\S]*?```/g;
         const codeBlocks = code.match(codeBlockRegex) || [];
-
         // If no code blocks found, truncate the text directly
         if (codeBlocks.length === 0) {
             return code.slice(0, maxLength) + '... (truncated)';
@@ -635,7 +632,6 @@ export class AIService {
                 const lines = block.split('\n');
                 const header = lines[0]; // Keep the ```typescript or similar
                 const footer = lines[lines.length - 1]; // Keep the closing ```
-
                 // Calculate how many lines we can keep
                 const maxLinesPerSection = Math.floor((maxLengthPerBlock - header.length - footer.length) / 3);
 
@@ -655,7 +651,6 @@ export class AIService {
                 code = code.replace(block, truncatedBlock);
             }
         }
-
         // Final safety check - if still too long, do a hard truncate
         if (code.length > maxLength) {
             const blocks = code.split('```');
@@ -670,7 +665,6 @@ export class AIService {
             });
             code = truncatedBlocks.join('```');
         }
-
         return code;
     }
 }
