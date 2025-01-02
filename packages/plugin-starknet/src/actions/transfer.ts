@@ -19,6 +19,15 @@ import { ERC20Token } from "../utils/ERC20Token";
 import { validateStarknetConfig } from "../environment";
 import { getAddressFromName, isStarkDomain } from "../utils/starknetId";
 
+/**
+ * Interface representing the transfer of content.
+ * @interface TransferContent
+ * @augments Content
+ * @property {string} tokenAddress - The address of the token being transferred.
+ * @property {string} [recipient] - The recipient of the transfer.
+ * @property {string} [starkName] - The stark name associated with the transfer.
+ * @property {string | number} amount - The amount being transferred.
+ */
 export interface TransferContent extends Content {
     tokenAddress: string;
     recipient?: string;
@@ -26,6 +35,12 @@ export interface TransferContent extends Content {
     amount: string | number;
 }
 
+/**
+ * Checks if the provided content is a valid TransferContent object.
+ *
+ * @param {TransferContent} content - The content to be validated.
+ * @returns {boolean} - True if the content is a valid TransferContent object, false otherwise.
+ */
 export function isTransferContent(
     content: TransferContent
 ): content is TransferContent {
