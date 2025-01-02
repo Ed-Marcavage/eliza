@@ -48,6 +48,12 @@ export const parseFormatedPercentage = (percent: string) =>
         100 * 10 ** PERCENTAGE_INPUT_PRECISION
     );
 
+/**
+ * Interface for specifying options for parsing currency amount.
+ * @typedef {Object} ParseCurrencyAmountOptions
+ * @property {number} fixed - The number of decimal places to fix the parsed currency amount.
+ * @property {number} [significant] - Optional number indicating significant figures to consider while parsing currency amount.
+ */
 interface ParseCurrencyAmountOptions {
     fixed: number;
     significant?: number;
@@ -73,6 +79,14 @@ export const formatPercentage = (percentage: Percent) => {
     return `${exact ? "" : "~"}${formatedPercentage}%`;
 };
 
+/**
+ * Represents a configuration object for defining retry behavior.
+ * @typedef {Object} RetryConfig
+ * @property {number} [maxRetries] - The maximum number of retry attempts.
+ * @property {number} [delay] - The initial delay in milliseconds between retry attempts.
+ * @property {number} [maxDelay] - The maximum delay in milliseconds between retry attempts.
+ * @property {Function} [backoff] - A function that calculates the backoff delay between retry attempts based on the retry count, current delay, and maximum delay.
+ */
 export type RetryConfig = {
     maxRetries?: number;
     delay?: number;
@@ -80,6 +94,20 @@ export type RetryConfig = {
     backoff?: (retryCount: number, delay: number, maxDelay: number) => number;
 };
 
+/**
+ * Fetch data from a URL with retries based on the specified configuration.
+ * 
+ * @template T The type of data expected to be returned.
+ * @param {string} url The URL to fetch from.
+ * @param {RequestInit} [options] The options for the fetch request.
+ * @param {RetryConfig} [config] The configuration options for retry behavior.
+ * @param {number} [config.maxRetries=3] The maximum number of retries before giving up.
+ * @param {number} [config.delay=1000] The initial delay between retries in milliseconds.
+ * @param {number} [config.maxDelay=10000] The maximum delay between retries in milliseconds.
+ * @param {function(number, number, number): number} [config.backoff] The exponential backoff function to compute the delay between retries.
+ * @returns {Promise<T>} A promise that resolves with the fetched data.
+ * @throws {Error} If all retry attempts fail, the last error encountered is thrown.
+ */
 export async function fetchWithRetry<T>(
     url: string,
     options?: RequestInit,

@@ -19,12 +19,24 @@ import {
 import { getStarknetAccount } from "../utils/index.ts";
 import { validateStarknetConfig } from "../environment.ts";
 
+/**
+ * Interface representing the content to be swapped.
+ * @property {string} sellTokenAddress - The address of the token to be sold.
+ * @property {string} buyTokenAddress - The address of the token to be bought.
+ * @property {string} sellAmount - The amount of tokens to be sold.
+ */
 interface SwapContent {
     sellTokenAddress: string;
     buyTokenAddress: string;
     sellAmount: string;
 }
 
+/**
+ * Checks if the given content object is a valid SwapContent object.
+ *
+ * @param {SwapContent} content - The content object to be validated
+ * @returns {boolean} - True if the content is a valid SwapContent object, false otherwise
+ */
 export function isSwapContent(content: SwapContent): content is SwapContent {
     // Validate types
     const validTypes =
