@@ -10,21 +10,42 @@ import { fetchWithRetry, getStarknetAccount } from "../utils";
 import { ERC20Token } from "../utils/ERC20Token";
 import { PORTFOLIO_TOKENS } from "./token.ts";
 
+/**
+ * Represents the prices of different cryptocurrencies in USD according to Coingecko.
+ * @typedef {Object.<string, {usd: number}>} CoingeckoPrices
+ */
 type CoingeckoPrices = {
     [cryptoName: string]: { usd: number };
 };
 
+/**
+ * Represents the token balances for each token address, where the key is the token address and the value is a bigint representing the balance.
+ */
 type TokenBalances = {
     [tokenAddress: string]: bigint;
 };
 
+/**
+ * Class representing a WalletProvider that interacts with the blockchain to fetch wallet portfolio and token USD values.
+ * @class
+ */
 export class WalletProvider {
     private runtime: IAgentRuntime;
 
+/**
+ * Constructor for creating a new instance of the class.
+ * * @param { IAgentRuntime } runtime - The runtime object to initialize the class with.
+ */
     constructor(runtime: IAgentRuntime) {
         this.runtime = runtime;
     }
 
+/**
+ * Asynchronously retrieves the wallet portfolio by fetching token balances for each token in PORTFOLIO_TOKENS.
+ * If the cached values are available, it returns them. Otherwise, it fetches the balances sequentially
+ * to prevent API issues. The fetched balances are stored in the cache for future use with a expiry time of 3 hours.
+ * @returns {Promise<TokenBalances>} The token balances for the wallet portfolio.
+ */
     async getWalletPortfolio(): Promise<TokenBalances> {
         const cacheKey = `walletPortfolio-${this.runtime.agentId}`;
         const cachedValues =
@@ -51,6 +72,11 @@ export class WalletProvider {
         return balances;
     }
 
+/**
+ * Retrieves the USD values of tokens from Coingecko API. 
+ * 
+ * @returns {Promise<CoingeckoPrices>} A promise that resolves to an object containing USD values of tokens from Coingecko API.
+ */
     async getTokenUsdValues(): Promise<CoingeckoPrices> {
         const cacheKey = "tokenUsdValues";
         const cachedValues =
