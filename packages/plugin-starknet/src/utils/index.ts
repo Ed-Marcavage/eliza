@@ -48,6 +48,11 @@ export const parseFormatedPercentage = (percent: string) =>
         100 * 10 ** PERCENTAGE_INPUT_PRECISION
     );
 
+/**
+ * Interface representing options for parsing currency amount.
+ * @property {number} fixed - The number of decimal places to fix the currency amount to.
+ * @property {number} [significant] - The number of significant digits in the currency amount. Optional.
+ */
 interface ParseCurrencyAmountOptions {
     fixed: number;
     significant?: number;
@@ -73,6 +78,14 @@ export const formatPercentage = (percentage: Percent) => {
     return `${exact ? "" : "~"}${formatedPercentage}%`;
 };
 
+/**
+ * Represents the configuration options for retrying an operation.
+ * @typedef {Object} RetryConfig
+ * @property {number} [maxRetries] - The maximum number of retries allowed.
+ * @property {number} [delay] - The initial delay before each retry.
+ * @property {number} [maxDelay] - The maximum delay allowed between retries.
+ * @property {(retryCount: number, delay: number, maxDelay: number) => number} [backoff] - The function to calculate the backoff time for retries.
+ */
 export type RetryConfig = {
     maxRetries?: number;
     delay?: number;
@@ -80,6 +93,14 @@ export type RetryConfig = {
     backoff?: (retryCount: number, delay: number, maxDelay: number) => number;
 };
 
+/**
+ * Fetches data from a URL with retry logic in case of failure.
+ * 
+ * @param {string} url - The URL to fetch data from.
+ * @param {RequestInit} [options] - Additional options to pass to the fetch function.
+ * @param {RetryConfig} [config] - Configuration options for retries.
+ * @returns {Promise<T>} A promise that resolves with the fetched data.
+ */
 export async function fetchWithRetry<T>(
     url: string,
     options?: RequestInit,
