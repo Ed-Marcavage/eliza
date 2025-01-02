@@ -1,6 +1,20 @@
 import { num } from "starknet";
 import { HolderData } from "../types/trustDB";
 
+/**
+ * Interface for token metrics.
+ * @typedef {Object} TokenMetrics
+ * @property {bigint} liquidityUsd - The liquidity in USD.
+ * @property {bigint} marketCapUsd - The market capitalization in USD.
+ * @property {bigint} totalSupply - The total supply.
+ * @property {number} ownerPercentage - The owner's percentage.
+ * @property {number} creatorPercentage - The creator's percentage.
+ * @property {number} top10HolderPercent - The percentage of top 10 holders.
+ * @property {number} priceChange24hPercent - The percentage change in price in the last 24 hours.
+ * @property {number} priceChange12hPercent - The percentage change in price in the last 12 hours.
+ * @property {number} uniqueWallet24h - The number of unique wallets in the last 24 hours.
+ * @property {bigint} volume24hUsd - The volume in USD in the last 24 hours.
+ */
 export interface TokenMetrics {
     liquidityUsd: bigint;
     marketCapUsd: bigint;
@@ -14,6 +28,17 @@ export interface TokenMetrics {
     volume24hUsd: bigint;
 }
 
+/**
+ * Interface representing trading thresholds for a cryptocurrency.
+ * @typedef {Object} TradingThresholds
+ * @property {number} [volume24hUsdThreshold] - The volume threshold in USD for the last 24 hours.
+ * @property {number} [priceChange24hPercentThreshold] - The price change threshold in percentage for the last 24 hours.
+ * @property {number} [priceChange12hPercentThreshold] - The price change threshold in percentage for the last 12 hours.
+ * @property {number} [top10HolderPercentThreshold] - The percentage threshold for top 10 holders.
+ * @property {number} [uniqueWallet24hThreshold] - The threshold for unique wallets in the last 24 hours.
+ * @property {number} [minimumLiquidityUsd] - The minimum liquidity threshold in USD.
+ * @property {number} [minimumMarketCapUsd] - The minimum market cap threshold in USD.
+ */
 export interface TradingThresholds {
     volume24hUsdThreshold?: number;
     priceChange24hPercentThreshold?: number;
@@ -24,6 +49,13 @@ export interface TradingThresholds {
     minimumMarketCapUsd?: number;
 }
 
+/**
+ * Evaluates if a token meets trading conditions based on the provided TokenMetrics and optional TradingThresholds.
+ *
+ * @param {TokenMetrics} metrics - The metrics of the token to evaluate.
+ * @param {TradingThresholds} thresholds - The thresholds for trading conditions (optional).
+ * @returns {{ shouldTrade: boolean, reasons: string[] }} An object with the evaluation result (shouldTrade) and reasons for the evaluation.
+ */
 export function evaluateTokenTrading(
     metrics: TokenMetrics,
     thresholds: TradingThresholds = {}
@@ -76,6 +108,14 @@ export function evaluateTokenTrading(
     };
 }
 
+/**
+ * Interface for holding analysis parameters.
+ * @typedef {Object} HolderAnalysisParams
+ * @property {HolderData[]} holders - Array of holder data
+ * @property {string} ownerBalance - Balance of the owner
+ * @property {string} creatorBalance - Balance of the creator
+ * @property {number} [thresholdPercentage] - Optional threshold percentage
+ */
 export interface HolderAnalysisParams {
     holders: HolderData[];
     ownerBalance: string;
@@ -83,6 +123,13 @@ export interface HolderAnalysisParams {
     thresholdPercentage?: number;
 }
 
+/**
+ * Interface representing the analysis result of a holder.
+ * @typedef { Object } HolderAnalysisResult
+ * @property { number } count - The number of holders.
+ * @property {Array<{ address: string, percentage: number }>} holders - An array containing objects with address and percentage of each holder.
+ * @property { bigint } totalSupply - The total supply of the holder.
+ */
 export interface HolderAnalysisResult {
     count: number;
     holders: Array<{
@@ -92,6 +139,13 @@ export interface HolderAnalysisResult {
     totalSupply: bigint;
 }
 
+/**
+ * Analyzes the high supply holders based on the specified parameters.
+ *
+ * @param {HolderAnalysisParams} params - The parameters for analyzing high supply holders.
+ * @returns {HolderAnalysisResult} The analysis result containing the count of high supply holders,
+ * the list of high supply holders, and the total supply.
+ */
 export function analyzeHighSupplyHolders(
     params: HolderAnalysisParams
 ): HolderAnalysisResult {
