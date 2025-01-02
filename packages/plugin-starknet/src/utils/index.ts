@@ -48,6 +48,11 @@ export const parseFormatedPercentage = (percent: string) =>
         100 * 10 ** PERCENTAGE_INPUT_PRECISION
     );
 
+/**
+ * Interface for ParseCurrencyAmountOptions
+ * @property {number} fixed - the fixed value for currency amount
+ * @property {number} [significant] - optional significant value for currency amount
+ */
 interface ParseCurrencyAmountOptions {
     fixed: number;
     significant?: number;
@@ -73,6 +78,15 @@ export const formatPercentage = (percentage: Percent) => {
     return `${exact ? "" : "~"}${formatedPercentage}%`;
 };
 
+/**
+ * Represents configuration options for retrying a task.
+ * @typedef {Object} RetryConfig
+ * @property {number} [maxRetries] - The maximum number of retries allowed.
+ * @property {number} [delay] - The delay in milliseconds before each retry.
+ * @property {number} [maxDelay] - The maximum delay in milliseconds allowed for backoff strategy.
+ * @property {function} [backoff] - A function that determines the delay for each retry based on parameters.
+ */
+```
 export type RetryConfig = {
     maxRetries?: number;
     delay?: number;
@@ -80,6 +94,19 @@ export type RetryConfig = {
     backoff?: (retryCount: number, delay: number, maxDelay: number) => number;
 };
 
+/**
+ * Retries fetching data from a URL with customizable retry logic.
+ * 
+ * @template T
+ * @param {string} url - The URL to fetch data from.
+ * @param {RequestInit} [options] - The options to be passed to the fetch function.
+ * @param {RetryConfig} [config] - The configuration options for controlling the retry behavior.
+ * @param {number} [config.maxRetries=3] - The maximum number of retries allowed.
+ * @param {number} [config.delay=1000] - The initial delay in milliseconds before retrying.
+ * @param {number} [config.maxDelay=10000] - The maximum delay in milliseconds before retrying.
+ * @param {function} [config.backoff] - The custom backoff function for calculating delay between retries.
+ * @returns {Promise<T>} - A Promise that resolves with the fetched data.
+ */
 export async function fetchWithRetry<T>(
     url: string,
     options?: RequestInit,
